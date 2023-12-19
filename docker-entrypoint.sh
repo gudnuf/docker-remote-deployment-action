@@ -37,9 +37,6 @@ if [ -z "$INPUT_SSH_PORT" ]; then
 fi
 
 STACK_FILE=${INPUT_STACK_FILE_NAME}
-DEPLOYMENT_COMMAND_OPTIONS="--host ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_SSH_PORT"
-
-DEPLOYMENT_COMMAND="docker-compose -f $STACK_FILE"
 
 
 SSH_HOST=${INPUT_REMOTE_DOCKER_HOST#*@}
@@ -66,6 +63,10 @@ echo "Create docker context"
 docker context create staging --docker "host=ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_SSH_PORT"
 docker context use staging
 
+DEPLOYMENT_COMMAND_OPTIONS="--context staging"
+DEPLOYMENT_COMMAND="docker-compose $DEPLOYMENT_COMMAND_OPTIONS -f $STACK_FILE"
+
+echo "Deployment Command: $DEPLOYMENT_COMMAND"
 
 if  [ -n "$INPUT_DOCKER_LOGIN_PASSWORD" ] || [ -n "$INPUT_DOCKER_LOGIN_USER" ] || [ -n "$INPUT_DOCKER_LOGIN_REGISTRY" ]; then
   echo "Connecting to $INPUT_REMOTE_DOCKER_HOST... Command: docker login"
@@ -73,9 +74,9 @@ if  [ -n "$INPUT_DOCKER_LOGIN_PASSWORD" ] || [ -n "$INPUT_DOCKER_LOGIN_USER" ] |
 fi
 
 echo "Command: ${DEPLOYMENT_COMMAND} pull"
-${DEPLOYMENT_COMMAND} ${DEPLOYMENT_COMMAND_OPTIONS} pull
+${DEPLOYMENT_COMMAND} pull
 
 echo "Command: ${DEPLOYMENT_COMMAND} ${INPUT_ARGS}"
-${DEPLOYMENT_COMMAND} ${DEPLOYMENT_COMMAND_OPTIONS} ${INPUT_ARGS}
+${DEPLOYMENT_COMMAND} ${INPUT_ARGS}
 
 
