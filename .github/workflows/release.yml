@@ -1,9 +1,6 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - master
   release:
     types:
       - created
@@ -35,4 +32,6 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: gudnuf/docker-remote-deployment-action:latest
+          tags: |
+            gudnuf/docker-remote-deployment-action:latest
+            gudnuf/docker-remote-deployment-action:${{ github.event.release.tag_name }}
