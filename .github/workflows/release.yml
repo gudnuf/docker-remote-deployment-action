@@ -35,6 +35,4 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: |
-            gudnuf/docker-remote-deployment-action:latest
-            gudnuf/docker-remote-deployment-action:${{ github.event.release.tag_name }}
+          tags: gudnuf/docker-remote-deployment-action:latest
