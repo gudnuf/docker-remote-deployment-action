@@ -63,11 +63,11 @@ echo "Create docker context"
 docker context create staging --docker "host=ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_SSH_PORT"
 docker context use staging
 
-echo $(docker context ls)
+echo $(docker context show)
 
-DEPLOYMENT_COMMAND_OPTIONS="--context staging"
+# DEPLOYMENT_COMMAND_OPTIONS="--context staging"
 echo "Deployment Command Options: $DEPLOYMENT_COMMAND_OPTIONS"
-DEPLOYMENT_COMMAND="docker-compose $DEPLOYMENT_COMMAND_OPTIONS -f $STACK_FILE"
+DEPLOYMENT_COMMAND="docker-compose -f $STACK_FILE"
 
 echo "Deployment Command: $DEPLOYMENT_COMMAND"
 
