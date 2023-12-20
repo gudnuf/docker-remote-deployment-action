@@ -63,17 +63,17 @@ echo "Create docker context"
 docker context create staging --docker "host=ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_SSH_PORT"
 docker context use staging
 
-echo $(docker context show)
+echo $(docker ps)
 
 # DEPLOYMENT_COMMAND_OPTIONS="--context staging"
 echo "Deployment Command Options: $DEPLOYMENT_COMMAND_OPTIONS"
-DEPLOYMENT_COMMAND="docker-compose --host ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_SSH_PORT -f $STACK_FILE"
+DEPLOYMENT_COMMAND="docker-compose --context staging -f $STACK_FILE"
 
 echo "Deployment Command: $DEPLOYMENT_COMMAND"
 
 if  [ -n "$INPUT_DOCKER_LOGIN_PASSWORD" ] || [ -n "$INPUT_DOCKER_LOGIN_USER" ] || [ -n "$INPUT_DOCKER_LOGIN_REGISTRY" ]; then
   echo "Connecting to $INPUT_REMOTE_DOCKER_HOST... Command: docker login"
-  docker login -u "$INPUT_DOCKER_LOGIN_USER" -p "$INPUT_DOCKER_LOGIN_PASSWORD" "$INPUT_DOCKER_LOGIN_REGISTRY"
+  docker --context staging login -u "$INPUT_DOCKER_LOGIN_USER" -p "$INPUT_DOCKER_LOGIN_PASSWORD" "$INPUT_DOCKER_LOGIN_REGISTRY"
 fi
 
 echo "Command: ${DEPLOYMENT_COMMAND} pull"
