@@ -67,7 +67,7 @@ echo $(docker ps)
 
 # DEPLOYMENT_COMMAND_OPTIONS="--context staging"
 echo "Deployment Command Options: $DEPLOYMENT_COMMAND_OPTIONS"
-DEPLOYMENT_COMMAND="docker-compose --context staging -f $STACK_FILE"
+DEPLOYMENT_COMMAND="docker-compose"
 
 echo "Deployment Command: $DEPLOYMENT_COMMAND"
 
